@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Typing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #word {
+      font-size: 32px;
+      margin: 20px;
+      color: #007bff;
+    }
+    #input {
+      padding: 10px;
+      font-size: 18px;
+    }
+    #score, #time {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .game-box {
+      background: #fff;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-box">
+    <h1>Typing Game for Kids</h1>
+    <div id="word">loading...</div>
+    <input type="text" id="input" placeholder="Type here..." autofocus />
+    <div id="score">Score: 0</div>
+    <div id="time">Time Left: 10s</div>
+  </div>
+
+  <script>
+    const words = ["apple", "banana", "cat", "dog", "car", "fish", "bird", "ball", "moon", "star"];
+    let currentWord = "";
+    let score = 0;
+    let timeLeft = 10;
+
+    const wordDisplay = document.getElementById("word");
+    const inputField = document.getElementById("input");
+    const scoreDisplay = document.getElementById("score");
+    const timeDisplay = document.getElementById("time");
+
+    function showWord() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      wordDisplay.textContent = currentWord;
+    }
+
+    function startGame() {
+      showWord();
+      const timer = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = "Time Left: " + timeLeft + "s";
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          alert("Time's up! Your score is " + score);
+          location.reload();
+        }
+      }, 1000);
+    }
+
+    inputField.addEventListener("input", () => {
+      if (inputField.value.toLowerCase() === currentWord.toLowerCase()) {
+        score++;
+        scoreDisplay.textContent = "Score: " + score;
+        inputField.value = "";
+        showWord();
+        timeLeft += 3; // bonus time
+      }
+    });
+
+    startGame();
+  </script>
+</body>
+</html>
