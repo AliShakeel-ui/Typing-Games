@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Game - Simple Version</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+      text-align: center;
+    }
+    .game-container {
+      background: white;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #aaa;
+    }
+    #word {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+    }
+    #input {
+      padding: 10px;
+      font-size: 18px;
+      width: 80%;
+      margin: 20px auto;
+    }
+    .score {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-container">
+  <h2>Simple Typing Game</h2>
+  <div id="word">Loading...</div>
+  <input type="text" id="input" placeholder="Type here..." autofocus />
+  <div class="score">Score: <span id="score">0</span></div>
+  <div class="score">Mistakes: <span id="mistakes">0</span></div>
+  <div id="result"></div>
+  <button onclick="startGame()">Restart</button>
+</div>
+
+<script>
+  const words = [
+    "apple", "banana", "grape", "orange", "school", "laptop", "cricket",
+    "keyboard", "mouse", "monitor", "phone", "bottle", "flower", "river",
+    "cloud", "window", "engine", "teacher", "student", "game"
+  ];
+
+  let currentWord = "";
+  let score = 0;
+  let mistakes = 0;
+
+  const wordDiv = document.getElementById("word");
+  const input = document.getElementById("input");
+  const scoreSpan = document.getElementById("score");
+  const mistakeSpan = document.getElementById("mistakes");
+  const resultDiv = document.getElementById("result");
+
+  function getRandomWord() {
+    return words[Math.floor(Math.random() * words.length)];
+  }
+
+  function showWord() {
+    currentWord = getRandomWord();
+    wordDiv.textContent = currentWord;
+    input.value = "";
+    input.focus();
+  }
+
+  function startGame() {
+    score = 0;
+    mistakes = 0;
+    scoreSpan.textContent = score;
+    mistakeSpan.textContent = mistakes;
+    resultDiv.textContent = "";
+    showWord();
+  }
+
+  input.addEventListener("input", () => {
+    if (input.value.trim() === currentWord) {
+      score++;
+      scoreSpan.textContent = score;
+      showWord();
+    } else if (currentWord.startsWith(input.value) === false) {
+      mistakes++;
+      mistakeSpan.textContent = mistakes;
+    }
+  });
+
+  startGame();
+</script>
+
+</body>
+</html>

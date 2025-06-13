@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Typing Game - Word & Sentence Mode</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f0f4c3, #ffffff);
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      color: #33691e;
+    }
+    #mode-select {
+      margin-bottom: 20px;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    #word {
+      font-size: 24px;
+      margin: 20px;
+      color: #333;
+    }
+    input {
+      font-size: 18px;
+      padding: 10px;
+      width: 60%;
+      border-radius: 8px;
+      border: 2px solid #33691e;
+      outline: none;
+    }
+    #result, #wpm {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <h1>Typing Game - Choose Mode</h1>
+
+  <select id="mode-select">
+    <option value="words">Word Typing Mode</option>
+    <option value="sentences">Sentence Typing Mode</option>
+  </select>
+
+  <div id="word"></div>
+  <input type="text" id="input" placeholder="Type here..." autofocus />
+  <div id="result"></div>
+  <div id="wpm"></div>
+<div id="score">Score: 0</div>
+
+  <script>
+    const wordModeWords = [
+      "apple", "banana", "school", "flower", "happy", "ocean", "chair", "light", "train", "mouse"
+    ];
+
+    const sentenceMode = [
+      "Typing is fun and easy.",
+      "The cat is on the roof.",
+      "We play cricket every day.",
+      "Books are our best friends.",
+      "She is going to school today."
+    ];
+
+    const wordElement = document.getElementById("word");
+    const inputElement = document.getElementById("input");
+    const resultElement = document.getElementById("result");
+    const wpmElement = document.getElementById("wpm");
+    const modeSelect = document.getElementById("mode-select");
+
+    let currentList = [];
+    let currentIndex = 0;
+    let correctCount = 0;
+    let startTime = null;
+
+    function setMode(mode) {
+      if (mode === "words") {
+        currentList = [...wordModeWords];
+      } else {
+        currentList = [...sentenceMode];
+      }
+      currentIndex = 0;
+      correctCount = 0;
+      resultElement.textContent = "";
+      wpmElement.textContent = "";
+      inputElement.disabled = false;
+      showItem();
+    }
+
+    function showItem() {
+      wordElement.textContent = currentList[currentIndex];
+      inputElement.value = "";
+      inputElement.focus();
+      if (currentIndex === 0) {
+        startTime = new Date();
+      }
+    }
+
+    inputElement.addEventListener("input", () => {
+      if (inputElement.value.trim() === currentList[currentIndex]) {
+        correctCount++;
+        currentIndex++;
+        if (currentIndex < currentList.length) {
+          showItem();
+        } else {
+          const endTime = new Date();
+          const timeTaken = (endTime - startTime) / 60000; // in minutes
+          const totalWords = currentList.reduce((acc, item) => acc + item.split(" ").length, 0);
+          const wpm = Math.round(totalWords / timeTaken);
+
+          resultElement.textContent = "✔️ Completed!";
+          wpmElement.textContent = `Typing Speed: ${wpm} WPM`;
+          inputElement.disabled = true;
+        }
+      }
+    });
+
+    // Mode cha6nge
+    modeSelect.addEventListener("change", () => {
+      setMode(modeSelect.value);
+    });
+
+    // Initial mode
+    setMode("words");
+  </script>
+</body>
+</html>
